@@ -1,0 +1,236 @@
+________BABABABA
+____BAABBA__B__A
+
+
+________BABABABA
+AB______BABAB__A
+AB________BABBAA
+ABBA________BBAA
+A__A______BBBBAA
+AAAA______BBBB__
+
+__________BABABABABA
+AB________BABABAB__A
+ABBA________BABAB__A
+ABBAAB______BAB____A
+ABBAAB________B__BAA
+A__AAB________BBBBAA
+AAAAAB________BBBB__
+
+__________BABABABABA
+AB________BABABAB__A
+ABBA________BABAB__A
+ABBAAB______BAB____A
+ABBAAB________B__BAA
+A__AAB________BBBBAA
+AAAAAB________BBBB__
+
+
+__________BABABABABA
+________ABBABABAB__A
+________ABBABA__BBAA
+________A__ABABBBBAA
+________AAAABABBBB__
+
+          1234567890
+__________BABABABABA
+________ABBABABAB__A 8 to -1
+________ABBA__BABBAA 3 to 8
+________ABBAABB__BAA 6 to 3
+________A__AABBBBBAA 0 to 6
+________AAAAABBBBB__ 9 to 0
+
+
+        12345678
+________BABABABA
+______ABBABAB__A 6 to -1
+______ABBA__BBAA 3 to 6
+______A__ABBBBAA 0 to 3
+______AAAABBBB__ 7 to 0
+
+______BABABA
+____ABBAB__A
+____AB__BBAA
+__AAAB__BB__
+__AAABBB____
+
+      123456
+______BABABA
+____ABB__ABA 2 to -1
+____ABBBAA__ 5 to 2
+__AAABBB____ 3 to -3
+
+____________BABABABABABA
+__________ABBABABABAB__A
+__________ABBA__BABABBAA
+__________ABBAABB__ABBAA
+__________A__AABBBBABBAA
+
+                1234567890123456
+________________BABABABABABABABA
+______________ABBABABABAB__ABABA 10 to -1
+______________ABBA__BABABBAABABA 3 to 10
+______________ABBAABBABABBAAB__A 14 to 3
+______________ABBAABBA__BBAABBAA 7 to 14
+
+______________A__AABBABBBBAABBAA 0 to 7
+______________AAAAABBABBBB__BBAA 11 to 0
+______________AAAAA__ABBBBBBBB__ 4 to 11
+______________AAAAAAAABBBBBBBB__ 15 to 4
+
+____________BABABABABABA
+__________ABBABABAB__ABA
+__________ABBA__BABBAABA
+__________ABBAABB__BAABA
+
+3:
+4: 6 3 0
+5: 8 3 6
+6:
+7:
+8: 10 3 14
+
+
+3 4
+4 5
+6 7
+8 9
+
+
+
+__________________BABABABABABABABABA
+________________ABBABABABABAB__ABABA
+________________ABBA__BABABABBAABABA
+________________ABBAABBABABABBAAB__A
+________________ABBAABBA__BABBAABBAA
+
+________________ABBAABBAABB__BAABBAA
+________________A__AABBAABBBBBAABBAA
+________________AAAAABBAABBBBB__BBAA
+________________AAAAA__AABBBBBBBBBAA
+________________AAAAAAAAABBBBBBBBB__
+
+
+
+______________BABABABABABABA
+____________ABBABABAB__ABABA
+____________ABBABABAB__ABABA
+____________ABBA__BABBAABABA
+____________ABBAABB__BAABABA
+____________ABBAABB__BAABABA
+
+
+
+________BABABABA
+______ABBABAB__A
+______ABBA__BBAA
+
+______A__ABBBBAA
+______AAAABBBB__
+
+______AAAABBBB__
+
+
+____BABA
+__ABB__A
+
+3
+______BABABA
+____ABB__ABA
+____ABBBAA__
+__AAABBB____
+
+
+4
+________BABABABA
+______ABBABAB__A
+______ABBA__BBAA
+______A__ABBBBAA
+______AAAABBBB__
+
+
+5
+__________BABABABABA
+________ABBAABB__BAA
+        ^^  ^^ ^^^^
+
+
+________ABBABABAB__A
+________ABBA__BABBAA
+________ABBAABB__BAA
+
+________A__AABBBBBAA
+________AAAAABBBBB__
+
+
+6
+
+____________BABABABABABA
+__________ABBA__BBAABBAA
+__________ABBAABBA__BBAA
+          ^^  ^^  ^^ ^^
+
+____________BABABABABABA
+________ABBAABBA__BBAA__
+        ^^^^^^  ^^ ^^ ^^
+
+
+____________BABABABABABA
+__________ABBAABB__ABABA
+          ^^  ^^ ^^
+
+
+
+__________ABBABAB__ABABA
+__________ABBABAB__ABABA
+
+
+____________BABABABABABA
+__________ABBABABABAB__A
+__________ABBA__BABABBAA
+__________ABBAABB__ABBAA
+
+
+__________ABBABAB__ABABA
+__________ABBA__BBAABABA
+__________ABBAAABB__BABA
+__________A__AAABBBBBABA
+__________A__AAABBBBBABA
+
+
+__________ABBA__BABABBAA
+__________ABBA__BABABBAA
+
+
+__________ABBAABB__ABBAA
+__________ABBAABB__ABBAA
+
+
+__________ABBAABBAB__BAA
+
+_____AAAAAABBBBBB_______
+________AAAAAABBBBBB____
+__________AAAAAABBBBBB__
+
+8
+________________BABABABABABABABA
+______________ABBABABABAB__ABABA
+______________ABBA__BABABBAABABA
+______________ABBAABBABABBAAB__A
+______________ABBAABBA__BBAABBAA
+______________A__AABBABBBBAABBAA
+______________AAAAABBABBBB__BBAA
+______________AAAAA__ABBBBBBBBAA
+______________AAAAAAAABBBBBBBB__
+
+9
+__________________BABABABABABABABABA
+________________ABBABABABABAB__ABABA
+________________ABBA__BABABABBAABABA
+________________ABBAABBABABABBAAB__A
+________________ABBAABBA__BABBAABBAA
+________________ABBAABBAABB__BAABBAA
+________________A__AABBAABBBBBAABBAA
+________________AAAAABBAABBBBB__BBAA
+________________AAAAA__AABBBBBBBBBAA
+________________AAAAAAAAABBBBBBBBB__

@@ -1,0 +1,83 @@
+4: 4 steps
+________BABABABA
+______ABBABAB__A: 6 to -1
+______ABBA__BBAA: 3 to 6
+______A__ABBBBAA: 0 to 3
+______AAAABBBB__: 7 to 0
+
+5: 5 steps
+__________BABABABABA
+________ABBABABAB__A: 8 to -1
+________ABBA__BABBAA: 3 to 8
+________ABBAABB__BAA: 6 to 3
+________A__AABBBBBAA: 0 to 6
+________AAAAABBBBB__: 9 to 0
+
+6: 6 steps
+____________BABABABABABA
+__________ABBABABABAB__A: 10 to -1
+__________ABBABABA__BBAA: 7 to 10
+__________ABB__ABAABBBAA: 2 to 7
+__________ABBAAAB__BBBAA: 6 to 2
+__________A__AAABBBBBBAA: 0 to 6
+__________AAAAAABBBBBB__: 11 to 0
+
+7: 7 steps
+______________BABABABABABABA
+____________ABBABABAB__ABABA: 8 to -1
+____________ABBABA__BBAABABA: 5 to 8
+____________ABBABAABBBAAB__A: 12 to 5
+____________ABBA__ABBBAABBAA: 3 to 12
+____________ABBAAAABBB__BBAA: 9 to 3
+____________A__AAAABBBBBBBAA: 0 to 9
+____________AAAAAAABBBBBBB__: 13 to 0
+
+8: 8 steps
+________________BABABABABABABABA
+______________ABBAB__ABABABABABA: 4 to -1
+______________ABBABBAABA__BABABA: 9 to 4
+______________ABBABBAABAABBAB__A: 14 to 9
+______________ABBABBAABAAB__BBAA: 11 to 14
+______________A__ABBAABAABBBBBAA: 0 to 11
+______________AAAABBAAB__BBBBBAA: 8 to 0
+______________AAAA__AABBBBBBBBAA: 3 to 8
+______________AAAAAAAABBBBBBBB__: 15 to 3
+
+9: 9 steps
+__________________BABABABABABABABABA
+________________ABBAB__ABABABABABABA: 4 to -1
+________________ABBABBAA__BABABABABA: 7 to 4
+________________ABBABBAAABBABABAB__A: 16 to 7
+________________ABBABBAAABBA__BABBAA: 11 to 16
+________________ABBABBAAABBAABB__BAA: 14 to 11
+________________A__ABBAAABBAABBBBBAA: 0 to 14
+________________AAAABBAAABB__BBBBBAA: 10 to 0
+________________AAAA__AAABBBBBBBBBAA: 3 to 10
+________________AAAAAAAAABBBBBBBBB__: 17 to 3
+
+10: 10 steps
+____________________BABABABABABABABABABA
+__________________ABBAB__ABABABABABABABA: 4 to -1
+__________________ABBABBAABABA__BABABABA: 11 to 4
+__________________ABBABBAABABAABBABAB__A: 18 to 11
+__________________ABBABBAABABAABBA__BBAA: 15 to 18
+__________________ABBABBA__ABAABBAABBBAA: 6 to 15
+__________________ABBABBAAAAB__BBAABBBAA: 10 to 6
+__________________A__ABBAAAABBBBBAABBBAA: 0 to 10
+__________________AAAABBAAAABBBBB__BBBAA: 14 to 0
+__________________AAAA__AAAABBBBBBBBBBAA: 3 to 14
+__________________AAAAAAAAAABBBBBBBBBB__: 19 to 3
+
+11: 11 steps
+______________________BABABABABABABABABABABA
+____________________ABBAB__ABABABABABABABABA: 4 to -1
+____________________ABBABBAABA__BABABABABABA: 9 to 4
+____________________ABBABBAABAABB__ABABABABA: 12 to 9
+____________________ABBABBAABAABBBAABA__BABA: 17 to 12
+____________________ABBABBAABAABBBAABAABB__A: 20 to 17
+____________________ABBABBAA__ABBBAABAABBBAA: 7 to 20
+____________________ABBABBAAAAABBB__BAABBBAA: 13 to 7
+____________________A__ABBAAAAABBBBBBAABBBAA: 0 to 13
+____________________AAAABBAAAAABBBBBB__BBBAA: 16 to 0
+____________________AAAA__AAAAABBBBBBBBBBBAA: 3 to 16
+____________________AAAAAAAAAAABBBBBBBBBBB__: 21 to 3
