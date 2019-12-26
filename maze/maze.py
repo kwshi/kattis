@@ -39,6 +39,24 @@ def equivalent_at_max(a, b, rot, depth=5):
     return True
 
 
+def equivalent_from(a, b, ia, ib, seen=frozenset()):
+    if (a, b, ia, ib) in seen:
+        return True
+
+    s = seen | {(a, b, ia, ib)}
+
+    l = len(graph[a])
+    for i in range(l):
+        x, y = graph[a][(i + ia) % l], graph[b][(i + ib) % l]
+
+        if len(graph[x]) != len(graph[y]):
+            return False
+
+        if not equivalent_from(x, y, indices[x][a], indices[y][b], seen=s):
+            return False
+    return True
+
+
 def equivalent_at(a, b, rot, seen=frozenset()):
     # print("comparing", a, b, rot)
     if (a, b, rot) in seen:
@@ -75,7 +93,10 @@ def equivalent(a, b):
     if len(graph[a]) != len(graph[b]):
         return False
     l = len(graph[a])
-    return any(equivalent_at(a, b, rot) for rot in range(l))
+    return any(
+        equivalent_from(a, b, ia, ib) for ia, ib in it.product(range(l), repeat=2)
+    )
+    # return any(equivalent_at(a, b, rot) for rot in range(l))
 
 
 def class_of(start, remaining):
