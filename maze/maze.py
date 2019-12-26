@@ -1,4 +1,5 @@
 import collections as co
+import functools as ft
 import itertools as it
 import pprint as pp
 import string
@@ -7,96 +8,118 @@ import string
 def parse():
     rooms = int(input())
     graph = {}
-    for i in range(1, rooms + 1):
+    indices = {}
+    for k in range(1, rooms + 1):
         _, *neighbors = input().strip().split()
-        graph[i] = list(map(int, neighbors))
-    return graph
+        graph[k] = list(map(int, neighbors))
+        indices[k] = {v: i for i, v in enumerate(graph[k])}
+    return graph, indices
 
 
-def can_assign(graph, assigned, taken, a, b):
-    if (
-        (a in assigned and assigned[a] != b)
-        or (b in taken and taken[b] != a)
-        or len(graph[a]) != len(graph[b])
-    ):
-        return False
-    return True
+graph, indices = parse()
 
 
-def relabel(graph, assigned={}, taken={}):
-    print("trying")
-    pp.pprint(assigned)
-    pp.pprint(taken)
-    print()
+def equivalent_at_max(a, b, rot, depth=5):
+    if not depth:
+        return True
 
-    try:
-        node = next(k for k in graph if k not in assigned)
-    except StopIteration:
-        yield assigned
-        return
+    l = len(graph[a])
+    for i in range(l):
+        x, y = graph[a][i], graph[b][(i + rot) % l]
 
-    neighbors = graph[node]
-    doors = len(neighbors)
-
-    for opt in graph:
-        if opt in taken or len(graph[opt]) != doors:
-            continue
-
-        for rot in range(len(neighbors)):
-            if not all(
-                can_assign(
-                    graph, assigned, taken, neighbors[i], graph[opt][(i + rot) % doors]
-                )
-                for i in range(doors)
-            ):
-                continue
-
-            yield from relabel(
-                graph,
-                assigned={
-                    **assigned,
-                    node: opt,
-                    **{
-                        neighbors[i]: graph[opt][(i + rot) % doors]
-                        for i in range(doors)
-                    },
-                },
-                taken={
-                    **taken,
-                    opt: node,
-                    **{
-                        graph[opt][(i + rot) % doors]: neighbors[i]
-                        for i in range(doors)
-                    },
-                },
-            )
-
-    pp.pprint("exit")
-
-
-def equivalents(graph):
-    eq = {k: set() for k in graph}
-    for re in relabel(graph):
-        for k, v in re.items():
-            eq[k].add(v)
-    return eq
-
-
-def valid(graph, re):
-    for a, b in it.product(graph, repeat=2):
-        if (b in graph[a]) != (re[b] in graph[re[a]]):
+        if len(graph[x]) != len(graph[y]):
             return False
+
+        k = len(graph[x])
+        r = (indices[y][b] - indices[x][a] + k) % k
+
+        if not equivalent_at_max(x, y, r, depth=depth - 1):
+            return False
+
     return True
 
 
-# def relabel_naive(graph):
-#    lens = co.defaultdict(list)
-#    for node, neighbors in graph.items():
-#        lens[len(neighbors)].append(node)
-#
-#    return lens.values()  # it.product(*lens.values())
+def equivalent_at(a, b, rot, seen=frozenset()):
+    # print("comparing", a, b, rot)
+    if (a, b, rot) in seen:
+        return True
+
+    s = seen | {(a, b, rot)}
+
+    l = len(graph[a])
+    for i in range(l):
+        x, y = graph[a][i], graph[b][(i + rot) % l]
+
+        if len(graph[x]) != len(graph[y]):
+            return False
+
+        k = len(graph[x])
+        r = (indices[y][b] - indices[x][a]) % k
+
+        if not equivalent_at(x, y, r, seen=s):
+            return False
+
+    return True
 
 
-# pp.pprint(list(relabel(parse(), assigned={7: 10}, taken={10: 7})))
-# pp.pprint(list(relabel_naive(parse())))
-pp.pprint(equivalents(parse()))
+@ft.lru_cache(None)
+def equivalent_max(a, b):
+    if len(graph[a]) != len(graph[b]):
+        return False
+    l = len(graph[a])
+    return any(equivalent_at_max(a, b, rot) for rot in range(l))
+
+
+@ft.lru_cache(None)
+def equivalent(a, b):
+    if len(graph[a]) != len(graph[b]):
+        return False
+    l = len(graph[a])
+    return any(equivalent_at(a, b, rot) for rot in range(l))
+
+
+def class_of(start, remaining):
+    front = co.deque([start])
+    seen = {start}
+    while front:
+        par = front.pop()
+        for child in remaining:
+            if child in seen or not equivalent(par, child):
+                continue
+            seen.add(child)
+            front.append(child)
+    return seen
+
+
+def classes():
+    remaining = set(graph.keys())
+    while remaining:
+        start = remaining.pop()
+        cl = class_of(start, remaining)
+        yield cl
+        remaining -= cl
+
+
+def solve():
+    cls = sorted((sorted(cl) for cl in classes() if len(cl) > 1), key=lambda cl: cl[0])
+    if not cls:
+        print("none")
+        return
+    for cl in cls:
+        print(" ".join(map(str, cl)))
+
+
+def test():
+    for k, neighbors in graph.items():
+        assert all(k in graph[n] for n in neighbors)
+
+    for cl in classes():
+        for a, b in it.combinations(cl, 2):
+            assert equivalent(a, b) and equivalent(b, a)
+
+    for cl1, cl2 in it.combinations(classes(), 2):
+        for a, b in it.product(cl1, cl2):
+            assert not equivalent(a, b) and not equivalent(b, a)
+
+
+solve()
