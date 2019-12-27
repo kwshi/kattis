@@ -7,140 +7,88 @@ import string
 
 def parse():
     rooms = int(input())
-    graph = {}
-    indices = {}
-    for k in range(1, rooms + 1):
-        _, *neighbors = input().strip().split()
-        graph[k] = list(map(int, neighbors))
-        indices[k] = {v: i for i, v in enumerate(graph[k])}
-    return graph, indices
+    graph = {
+        k: list(map(int, input().strip().split()))[1:]
+        for k in range(1, rooms + 1)
+    }
+    return maze(graph)
 
 
-graph, indices = parse()
+class maze:
+    def __init__(self, graph):
+        self.graph = graph
+        self.indices = {
+            k: {v: i for i, v in enumerate(neighbors)}
+            for k, neighbors in graph.items()
+        }
+        self.memo = {}
 
+    def equivalent_at(self, a, b, rot, memo={}):
+        key = a, b, rot
+        if key in memo:
+            return memo[key]
 
-def equivalent_at_max(a, b, rot, depth=5):
-    if not depth:
-        return True
+        memo[key] = True
 
-    l = len(graph[a])
-    for i in range(l):
-        x, y = graph[a][i], graph[b][(i + rot) % l]
+        l = len(self.graph[a])
+        for i in range(l):
+            x, y = self.graph[a][i], self.graph[b][(i + rot) % l]
 
-        if len(graph[x]) != len(graph[y]):
+            if len(self.graph[x]) != len(self.graph[y]):
+                memo[key] = False
+                break
+
+            k = len(self.graph[x])
+            r = (self.indices[y][b] - self.indices[x][a]) % k
+
+            if not self.equivalent_at(x, y, r, memo):
+                memo[key] = False
+                break
+
+        return memo[key]
+
+    @ft.lru_cache(None)
+    def equivalent(self, a, b):
+        # pp.pprint(self.graph)
+        # print(a, b)
+        if len(self.graph[a]) != len(self.graph[b]):
             return False
+        l = len(self.graph[a])
+        return any(self.equivalent_at(a, b, rot) for rot in range(l))
 
-        k = len(graph[x])
-        r = (indices[y][b] - indices[x][a] + k) % k
+    def class_of(self, start, remaining):
+        front = co.deque([start])
+        seen = {start}
+        while front:
+            par = front.pop()
+            for child in remaining:
+                if child in seen or not self.equivalent(par, child):
+                    continue
+                seen.add(child)
+                front.append(child)
+        return seen
 
-        if not equivalent_at_max(x, y, r, depth=depth - 1):
-            return False
+    def classes(self):
+        remaining = set(self.graph.keys())
+        while remaining:
+            start = remaining.pop()
+            cl = self.class_of(start, remaining)
+            yield cl
+            remaining -= cl
 
-    return True
-
-
-def equivalent_from(a, b, ia, ib, seen=frozenset()):
-    if (a, b, ia, ib) in seen:
-        return True
-
-    s = seen | {(a, b, ia, ib)}
-
-    l = len(graph[a])
-    for i in range(l):
-        x, y = graph[a][(i + ia) % l], graph[b][(i + ib) % l]
-
-        if len(graph[x]) != len(graph[y]):
-            return False
-
-        if not equivalent_from(x, y, indices[x][a], indices[y][b], seen=s):
-            return False
-    return True
-
-
-def equivalent_at(a, b, rot, seen=frozenset()):
-    # print("comparing", a, b, rot)
-    if (a, b, rot) in seen:
-        return True
-
-    s = seen | {(a, b, rot)}
-
-    l = len(graph[a])
-    for i in range(l):
-        x, y = graph[a][i], graph[b][(i + rot) % l]
-
-        if len(graph[x]) != len(graph[y]):
-            return False
-
-        k = len(graph[x])
-        r = (indices[y][b] - indices[x][a]) % k
-
-        if not equivalent_at(x, y, r, seen=s):
-            return False
-
-    return True
+    def solve(self):
+        cls = sorted(
+            (sorted(cl) for cl in self.classes() if len(cl) > 1),
+            key=lambda cl: cl[0],
+        )
+        return cls
 
 
-@ft.lru_cache(None)
-def equivalent_max(a, b):
-    if len(graph[a]) != len(graph[b]):
-        return False
-    l = len(graph[a])
-    return any(equivalent_at_max(a, b, rot) for rot in range(l))
+if __name__ == "__main__":
+    cls = parse().solve()
 
-
-@ft.lru_cache(None)
-def equivalent(a, b):
-    if len(graph[a]) != len(graph[b]):
-        return False
-    l = len(graph[a])
-    return any(
-        equivalent_from(a, b, ia, ib) for ia, ib in it.product(range(l), repeat=2)
-    )
-    # return any(equivalent_at(a, b, rot) for rot in range(l))
-
-
-def class_of(start, remaining):
-    front = co.deque([start])
-    seen = {start}
-    while front:
-        par = front.pop()
-        for child in remaining:
-            if child in seen or not equivalent(par, child):
-                continue
-            seen.add(child)
-            front.append(child)
-    return seen
-
-
-def classes():
-    remaining = set(graph.keys())
-    while remaining:
-        start = remaining.pop()
-        cl = class_of(start, remaining)
-        yield cl
-        remaining -= cl
-
-
-def solve():
-    cls = sorted((sorted(cl) for cl in classes() if len(cl) > 1), key=lambda cl: cl[0])
     if not cls:
         print("none")
-        return
+
     for cl in cls:
         print(" ".join(map(str, cl)))
-
-
-def test():
-    for k, neighbors in graph.items():
-        assert all(k in graph[n] for n in neighbors)
-
-    for cl in classes():
-        for a, b in it.combinations(cl, 2):
-            assert equivalent(a, b) and equivalent(b, a)
-
-    for cl1, cl2 in it.combinations(classes(), 2):
-        for a, b in it.product(cl1, cl2):
-            assert not equivalent(a, b) and not equivalent(b, a)
-
-
-solve()
