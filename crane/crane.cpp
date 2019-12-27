@@ -80,14 +80,12 @@ interval solve(vector<pt> pts) {
 }
 
 int main() {
-  vector<pt> pts;
   size_t count;
   cin >> count;
-  for (size_t i{}; i < count; ++i) {
-    pt p;
-    cin >> p.x >> p.y;
-    pts.push_back(p);
-  }
+
+  vector<pt> pts(count);
+  for (size_t i{}; i < count; ++i)
+    cin >> pts[i].x >> pts[i].y;
 
   interval i{solve(pts)};
   if (i.low > i.high) {
