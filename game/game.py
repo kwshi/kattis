@@ -7,46 +7,42 @@ import string
 
 def parse():
     size = int(input())
-    return [
-        [
-            {ord(c) - ord("a") for c in opt}
-            for opt in input().strip().split()[1:]
-        ]
-        for _ in range(size)
-    ]
+    parents = [co.defaultdict(list) for _ in range(size)]
+    for parent in range(size):
+        for opt in input().strip().split()[1:]:
+            opt = [ord(c) - ord("a") for c in opt]
+            for child in opt:
+                parents[child][parent].append(opt)
+
+    return list(map(dict, parents))
 
 
-def solve(options):
-    # nodes = [opt for opts in options for opt in opts]
-
-    for i, opts in enumerate(options):
-        acc = []
-        for opt in opts:
-            if any(o.issubset(opt) for o in acc):
+def rev_search(parents, target):
+    front = co.deque([target])
+    seen = {target: 0}
+    while front:
+        child = front.popleft()
+        for parent, opts in parents[child].items():
+            if parent in seen:
                 continue
-            acc.append(opt)
-        assert len(acc) < 500
-        options[i] = acc
 
-    dist = [[math.inf] * len(options) for _ in options]
-    for i, opts in enumerate(options):
-        dist[i][i] = 0
+            dist = 1 + min(
+                max(seen.get(c, math.inf) for c in opt) for opt in opts
+            )
+            if dist == math.inf or dist != seen[child] + 1:
+                continue
 
-    for i in range(len(options)):
-        for _ in range(len(options) - 1):
-            for j in range(len(options)):
-                dist[j][i] = min(
-                    dist[j][i],
-                    1 + min(max(dist[k][i] for k in opt) for opt in options[j]),
-                )
+            seen[parent] = dist
+            front.append(parent)
 
-    # for k, i, j in it.product(range(len(options)), repeat=3):
-    #    # best route from i to j using 0..k
-    #    # min(max(for l in opt) for opt in options[i])
-    #    # dist[i]
-    #    dist[i][j] = min(dist[i][j], )
-    #    pass
+    return seen
 
+
+def solve(parents):
+    dist = [[-1] * len(parents) for _ in parents]
+    for target in range(len(parents)):
+        for src, d in rev_search(parents, target).items():
+            dist[src][target] = d
     return dist
 
 
@@ -56,3 +52,4 @@ def show(dist):
 
 
 show(solve(parse()))
+# pp.pprint(parse())
