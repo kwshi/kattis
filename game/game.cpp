@@ -5,43 +5,46 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <set>
+#include <map>
 #include <deque>
 #include <string>
 #include <limits>
 
 using namespace std;
 
-//bool operator<=(const opt_t& a, const opt_t& b) {
-//  if (a.size() > b.size()) return false;
-//  for (char c : a)
-//    if (b.find(c) == b.end()) return false;
-//  return true;
-//}
+using opt_t = unordered_set<char>;
+
+bool operator<=(const opt_t& a, const opt_t& b) {
+  if (a.size() > b.size()) return false;
+  for (char c : a)
+    if (b.find(c) == b.end()) return false;
+  return true;
+}
 
 // filters away any option that is a superset of another
-//vector<opt_t> filter_supsets(const vector<opt_t>& opts) {
-//  vector<bool> keep(opts.size(), true);
-//  for (size_t i{}; i < opts.size(); ++i) {
-//    const opt_t& opt{opts[i]};
-//
-//    // check if any other option is a subset
-//    for (size_t j{}; j < opts.size(); ++j) {
-//      const opt_t& other{opts[j]};
-//
-//      if (i == j || !(other <= opt)) continue;
-//
-//      // if two options are equal, keep the earlier one
-//      if (other.size() == opt.size() && i < j) continue;
-//
-//      keep[i] = false;
-//    }
-//  }
-//
-//  vector<opt_t> kept;
-//  for (size_t i{}; i < opts.size(); ++i)
-//    if (keep[i]) kept.push_back(opts[i]);
-//  return kept;
-//}
+vector<opt_t> filter_supsets(const vector<opt_t>& opts) {
+  vector<bool> keep(opts.size(), true);
+  for (size_t i{}; i < opts.size(); ++i) {
+    const opt_t& opt{opts[i]};
+
+    // check if any other option is a subset
+    for (size_t j{}; j < opts.size(); ++j) {
+      const opt_t& other{opts[j]};
+
+      if (i == j || !(other <= opt)) continue;
+
+      // if two options are equal, keep the earlier one
+      if (other.size() == opt.size() && i < j) continue;
+
+      keep[i] = false;
+    }
+  }
+
+  vector<opt_t> kept;
+  for (size_t i{}; i < opts.size(); ++i)
+    if (keep[i]) kept.push_back(opts[i]);
+  return kept;
+}
 
 char show(char c) {
   return c + 'a';
@@ -61,10 +64,10 @@ struct game {
   vector<unordered_set<char>> contents;
 
   // mapping from node to options containing that node
-  vector<unordered_set<size_t>> containers;
+  vector<vector<size_t>> containers;
 
   // mapping from option to nodes providing that option
-  vector<unordered_set<char>> providers;
+  vector<vector<char>> providers;
 
   // mapping from node to options provided by that node
   //vector<unordered_set<size_t>> available;
@@ -73,7 +76,7 @@ struct game {
   //vector<string> options;
 
   // mapping from string to index
-  //unordered_map<string, size_t> index;
+  unordered_map<string, size_t> index;
 
   // parsing
   game(istream& cin) {
@@ -81,44 +84,71 @@ struct game {
     containers.resize(n);
     //available.resize(n);
 
-    size_t idx{};
+    //size_t idx{};
+
+    bool nasty{};
 
     for (size_t i{}; i < n; ++i) {
       size_t m{};
       cin >> m;
 
+      //if (m > 1000) throw invalid_argument{""};
+      nasty |= m > 1000;
+
+      vector<opt_t> opts(m);
+
       for (size_t j{}; j < m; ++j) {
         string opt;
         cin >> opt;
 
-        //if (index.find(opt) == index.end()) {
-        //  index[opt] = index.size();
-        //  //options.push_back(opt);
-        //  contents.emplace_back();
-        //  providers.emplace_back();
-        //  if (contents.size() != providers.size() || contents.size() != index.size())
-        //    throw invalid_argument{"aaa"};
-        //}
-        //size_t idx{index[opt]};
+        for (char c : opt)
+          opts[j].insert(c);
+      }
 
-        contents.emplace_back();
-        providers.emplace_back();
+      vector<opt_t> filtered{filter_supsets(opts)};
+
+      for (const opt_t& opt_set : filtered) {
+
+        string opt;
+        for (char c : opt_set) {
+          opt.push_back(c);
+        }
+        sort(opt.begin(), opt.end());
+
+        if (providers.size() > 1000000) throw invalid_argument{""};
+
+        if (index.find(opt) == index.end()) {
+          index[opt] = index.size();
+          //options.push_back(opt);
+          contents.emplace_back();
+          providers.emplace_back();
+          //if (contents.size() != providers.size() || contents.size() != index.size()) {
+          //  cout << opt << " " << contents.size() << " " << providers.size() << " " << index.size() << endl;
+          //  throw invalid_argument{"aaa"};
+          //}
+        }
+        size_t idx{index[opt]};
+
+        //contents.emplace_back();
+        //providers.emplace_back();
 
         for (char& c : opt) c -= 'a';
 
         //cout << contents.size() << " " << idx << endl;
 
         for (char c : opt) {
-          containers[c].insert(idx);
+          containers[c].push_back(idx);
           contents[idx].insert(c);
         }
 
-        providers[idx].insert(i);
+        providers[idx].push_back(i);
         //available[i].insert(idx);
 
         ++idx;
       }
     }
+
+    //if (nasty) throw invalid_argument{""};
 
     //for (size_t i{}; i < options.size(); ++i) {
     //  cout << i << " " << options[i] << endl;
