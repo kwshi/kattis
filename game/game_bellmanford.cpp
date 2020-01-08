@@ -6,39 +6,6 @@
 using std::vector;
 using std::string;
 
-bool operator<=(const string& a, const string& b) {
-  if (a.size() > b.size()) return false;
-  size_t i{}, j{};
-  while (i < a.size() && j < b.size()) {
-    if (a[i] < b[j]) return false;
-    if (a[i] > b[j]) {
-      ++j;
-      continue;
-    }
-    ++i;
-    ++j;
-  }
-  if (j == b.size()) return false;
-  return true;
-}
-
-vector<string> filter(const vector<string>& all) {
-  vector<string> kept;
-  for (size_t i{}; i < all.size(); ++i) {
-    bool keep{true};
-    for (size_t j{}; j < all.size(); ++j) {
-      if (i == j
-          || !(all[j] <= all[i])
-          || (all[i].size() == all[j].size() && i < j))
-        continue;
-      keep = false;
-      break;
-    }
-    if (keep) kept.push_back(all[i]);
-  }
-  return kept;
-}
-
 struct game {
   int n;
   vector<vector<string>> opts;
